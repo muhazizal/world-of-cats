@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <!-- {{ cats }} -->
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <home-cat-list-item v-for="(cat, index) in cats" :key="index" :cat="cat" />
   </div>
 </template>
 <script>
