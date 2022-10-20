@@ -18,7 +18,6 @@ export default {
 .item {
   &__img {
     width: 100%;
-    max-width: 250px;
     height: 100%;
     max-height: 250px;
     object-fit: cover;

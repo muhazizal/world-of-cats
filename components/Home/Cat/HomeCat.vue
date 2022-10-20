@@ -1,6 +1,7 @@
 <template>
   <div>
-    <home-cat-list :cats="cats" />
+    <home-cat-list-skeleton v-show="isLoadingGetCats" />
+    <home-cat-list v-show="!isLoadingGetCats" :cats="cats" />
   </div>
 </template>
 <script>

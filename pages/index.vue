@@ -2,8 +2,8 @@
   <div
     class="container mx-auto p-4 flex flex-auto flex-col justify-center items-center text-center font-sans"
   >
-    <home-greeting class="mb-4" />
-    <home-cat />
+    <home-greeting class="mb-4 md:mb-8" />
+    <home-cat class="w-full" />
   </div>
 </template>
 
