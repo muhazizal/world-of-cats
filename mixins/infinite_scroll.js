@@ -17,16 +17,15 @@ export default {
         this.throttleTimer = false
       }, time)
     },
-    addInfiniteScroll(callback) {
+    addInfiniteScroll() {
       window.addEventListener('scroll', this.handleInfiniteScroll)
     },
-    setPagination(headers, callback) {
+    setPagination(headers) {
       const count = parseInt(headers['pagination-count'])
       const limit = parseInt(headers['pagination-limit'])
       this.pageCount = Math.ceil(count / limit) - 1
       if (this.currentPage < this.pageCount) {
         this.currentPage += 1
-        callback()
       }
     },
     handleInfiniteScroll() {

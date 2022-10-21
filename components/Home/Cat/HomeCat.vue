@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <home-cat-filter /> -->
     <home-cat-list :cats="cats" class="mb-4" />
     <home-cat-list-skeleton v-show="isLoadingGetCats" />
   </div>
@@ -12,13 +13,16 @@ export default {
   data() {
     return {
       isLoadingGetCats: false,
-      cats: [],
-      getCatsParams: {
+      params: {
         limit: 20,
         order: 'DESC',
-        page: 0,
       },
     }
+  },
+  computed: {
+    cats() {
+      return this.$store.getters['cats/getCats']
+    },
   },
   async mounted() {
     await this.handleFetchData()
@@ -26,40 +30,23 @@ export default {
   },
   methods: {
     async handleFetchData() {
-      await this.getCats()
-    },
-    async getCats() {
       if (this.isLoadingGetCats) return
       this.isLoadingGetCats = true
-      try {
-        const response = await this.$axios.get('/images/search', {
-          params: this.getCatsParams,
-        })
-        if (response) {
-          const { data, headers } = response
-          this.setPagination(headers, () => {
-            this.getCatsParams.page += 1
-          })
-          this.onSetCatsData(data)
-        }
-      } catch (error) {
-        this.onFailGetCats(error)
-      }
+      await this.$store.dispatch('cats/getCats', {
+        params: {
+          limit: this.params.limit,
+          order: this.params.order,
+          page: this.currentPage,
+        },
+        onSuccess: (headers) => this.onSuccessFetchData(headers),
+        onFaill: (error) => this.onFailFetchData(error),
+      })
     },
-    onSetCatsData(cats) {
-      if (this.cats.length === 0) {
-        this.cats = cats
-      } else {
-        cats.forEach((cat) => {
-          const isCatExist = this.cats.find((x) => x.id === cat.id)
-          if (!isCatExist) {
-            this.cats.push(cat)
-          }
-        })
-      }
+    onSuccessFetchData(headers) {
+      this.setPagination(headers)
       this.isLoadingGetCats = false
     },
-    onFailGetCats(error) {
+    onFailFetchData(error) {
       alert(error)
       this.isLoadingGetCats = false
     },
