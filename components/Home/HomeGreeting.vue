@@ -6,5 +6,6 @@
 <script>
 export default {
   name: 'HomeGreeting',
+  // test ssh github muhazizal.26@gmail.com
 }
 </script>
