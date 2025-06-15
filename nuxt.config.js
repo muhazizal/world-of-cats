@@ -54,19 +54,13 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config, { isServer }) {
-      if (isServer) {
-        const externals = config.externals || []
+      if (!config.resolve) config.resolve = {}
+      if (!config.resolve.alias) config.resolve.alias = {}
 
-        config.externals = externals.map((external) => {
-          if (typeof external !== 'function') return external
-          return (context, request, callback) => {
-            if (request === 'node-fetch-native') {
-              return callback() // bundle it!
-            }
-            return external(context, request, callback)
-          }
-        })
-      }
+      config.resolve.alias['node-fetch-native'] = require('path').resolve(
+        __dirname,
+        'shims/node-fetch-native.js'
+      )
     },
   },
 }
