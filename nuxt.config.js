@@ -52,5 +52,20 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    extend(config, { isServer }) {
+      if (isServer) {
+        config.externals = config.externals || []
+        config.externals = config.externals.map((ext) => {
+          if (typeof ext !== 'function') return ext
+          return (context, request, callback) => {
+            if (request === 'node-fetch-native') {
+              return callback() // force bundle it
+            }
+            return ext(context, request, callback)
+          }
+        })
+      }
+    },
+  },
 }
