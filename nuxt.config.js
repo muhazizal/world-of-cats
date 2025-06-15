@@ -55,14 +55,15 @@ export default {
   build: {
     extend(config, { isServer }) {
       if (isServer) {
-        config.externals = config.externals || []
-        config.externals = config.externals.map((ext) => {
-          if (typeof ext !== 'function') return ext
+        const externals = config.externals || []
+
+        config.externals = externals.map((external) => {
+          if (typeof external !== 'function') return external
           return (context, request, callback) => {
             if (request === 'node-fetch-native') {
-              return callback() // force bundle it
+              return callback() // bundle it!
             }
-            return ext(context, request, callback)
+            return external(context, request, callback)
           }
         })
       }
